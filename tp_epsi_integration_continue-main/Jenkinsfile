@@ -23,20 +23,21 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Compilation du projet...'
-                // TODO : Ajouter la commande Maven pour nettoyer et compiler le projet (sans lancer les tests)
-                sh 'mvn clean compile -DskipTests'
+                dir('tp_epsi_integration_continue-main') {
+                    sh 'mvn clean compile -DskipTests'
+                }
             }
         }
 
         stage('Test & Code Coverage') {
             steps {
                 echo 'Exécution des tests et génération du rapport JaCoCo...'
-                // TODO : Ajouter la commande Maven pour lancer les tests
-                sh 'mvn test'
+                dir('tp_epsi_integration_continue-main') {
+                    sh 'mvn test'
+                }
             }
             post {
                 always {
-                    // TODO : Indiquer à Jenkins où récupérer les rapports de tests au format XML (indice : plugin junit)
                     junit '**/target/surefire-reports/*.xml'
                 }
             }
@@ -49,9 +50,9 @@ pipeline {
             }
             steps {
                 echo 'Analyse de la qualité du code avec SonarQube...'
-                // TODO : Ajouter la commande Maven pour lancer l'analyse SonarQube
-                // N'oubliez pas de passer les propriétés : sonar.projectKey, sonar.host.url et sonar.login
-                sh 'mvn sonar:sonar -Dsonar.projectKey=bad-practices-app -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN}'
+                dir('tp_epsi_integration_continue-main') {
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=bad-practices-app -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN}'
+                }
             }
         }
 
