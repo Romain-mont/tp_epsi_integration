@@ -44,14 +44,12 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            environment {
-                // Nécessite de configurer un secret text "sonar-token" dans Jenkins
-                SONAR_TOKEN = credentials('sonar-token')
-            }
             steps {
                 echo 'Analyse de la qualité du code avec SonarQube...'
-                dir('tp_epsi_integration_continue-main') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=bad-practices-app -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN}'
+                withSonarQubeEnv('sonarqube') {
+                    dir('tp_epsi_integration_continue-main') {
+                        sh 'mvn sonar:sonar -Dsonar.projectKey=bad-practices-app'
+                    }
                 }
             }
         }
