@@ -11,7 +11,21 @@ public class UserService {
 
     private static final Logger LOGGER = Logger.getLogger(UserService.class.getName());
 
-    private String dbPassword = System.getenv("DB_PASSWORD");
+    private final String dbPassword;
+    private final String dbUrl;
+    private final String dbUser;
+
+    public UserService() {
+        this.dbPassword = System.getenv("DB_PASSWORD");
+        this.dbUrl = System.getenv("DB_URL");
+        this.dbUser = System.getenv("DB_USER");
+    }
+
+    UserService(String dbUrl, String dbUser, String dbPassword) {
+        this.dbUrl = dbUrl;
+        this.dbUser = dbUser;
+        this.dbPassword = dbPassword;
+    }
 
     public void login(String username, String password) {
         LOGGER.log(Level.INFO, "Tentative de connexion de l''utilisateur : {0}", username);
@@ -27,9 +41,6 @@ public class UserService {
     }
 
     public void getUserDetails(String username) {
-        String dbUrl = System.getenv("DB_URL");
-        String dbUser = System.getenv("DB_USER");
-
         try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
              PreparedStatement stmt = conn.prepareStatement("SELECT username FROM users WHERE username = ?")) {
 
