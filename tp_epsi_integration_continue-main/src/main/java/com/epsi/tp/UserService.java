@@ -51,9 +51,11 @@ public class UserService {
             return;
         }
         if (b <= 0) {
-            LOGGER.info(c > 0 ? "B est négatif" : "B et C sont négatifs");
+            String msg = c > 0 ? "B est négatif" : "B et C sont négatifs";
+            LOGGER.info(msg);
             return;
         }
-        LOGGER.info(c > 0 ? "Tous positifs" : "C est négatif");
+        String msg = c > 0 ? "Tous positifs" : "C est négatif";
+        LOGGER.info(msg);
     }
 }
