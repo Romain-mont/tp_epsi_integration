@@ -22,4 +22,11 @@ class UserServiceTest {
             userService.complexMethod(-1, 0, 0);
         });
     }
+
+    @Test
+    void testGetUserDetailsWithInvalidUrl() {
+        // DB_URL env var is null → DriverManager throws → couvre le bloc catch
+        UserService userService = new UserService();
+        assertDoesNotThrow(() -> userService.getUserDetails("john_doe"));
+    }
 }
